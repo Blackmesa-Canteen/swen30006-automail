@@ -1,9 +1,9 @@
-package simulation;
+package swen30006.simulation;
 
 import java.util.*;
 
-import automail.MailItem;
-import automail.MailPool;
+import swen30006.automail.MailItem;
+import swen30006.automail.MailPool;
 
 /**
  * This class generates the mail

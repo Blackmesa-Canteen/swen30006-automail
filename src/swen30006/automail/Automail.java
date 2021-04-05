@@ -1,6 +1,6 @@
-package automail;
+package swen30006.automail;
 
-import simulation.IMailDelivery;
+import swen30006.simulation.IMailDelivery;
 
 public class Automail {
 	      

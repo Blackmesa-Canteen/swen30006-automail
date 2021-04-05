@@ -1,10 +1,10 @@
-package automail;
+package swen30006.automail;
 
-import exceptions.ExcessiveDeliveryException;
-import exceptions.ItemTooHeavyException;
-import simulation.Building;
-import simulation.Clock;
-import simulation.IMailDelivery;
+import swen30006.exceptions.ExcessiveDeliveryException;
+import swen30006.exceptions.ItemTooHeavyException;
+import swen30006.simulation.Building;
+import swen30006.simulation.Clock;
+import swen30006.simulation.IMailDelivery;
 
 /**
  * The robot delivers mail!
@@ -92,7 +92,7 @@ public class Robot {
                     delivery.deliver(deliveryItem);
                     deliveryItem = null;
                     deliveryCounter++;
-                    if(deliveryCounter > 2){  // Implies a swen30006.simulation bug
+                    if(deliveryCounter > 2){  // Implies a swen30006.swen30006.simulation bug
                     	throw new ExcessiveDeliveryException();
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/

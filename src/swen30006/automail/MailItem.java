@@ -1,4 +1,4 @@
-package automail;
+package swen30006.automail;
 
 import java.util.Map;
 import java.util.TreeMap;

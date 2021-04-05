@@ -1,6 +1,6 @@
-package simulation;
+package swen30006.simulation;
 
-import automail.MailItem;
+import swen30006.automail.MailItem;
 
 /**
  * a MailDelivery is used by the Robot to deliver mail once it has arrived at the correct location

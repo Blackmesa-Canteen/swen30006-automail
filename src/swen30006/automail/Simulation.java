@@ -1,9 +1,9 @@
-package simulation;
+package swen30006.automail;
 
 import com.unimelb.swen30006.wifimodem.WifiModem;
-import exceptions.ExcessiveDeliveryException;
-import exceptions.ItemTooHeavyException;
-import exceptions.MailAlreadyDeliveredException;
+import swen30006.exceptions.ExcessiveDeliveryException;
+import swen30006.exceptions.ItemTooHeavyException;
+import swen30006.exceptions.MailAlreadyDeliveredException;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,9 +11,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
-import automail.Automail;
-import automail.MailItem;
-import automail.MailPool;
+import swen30006.automail.Automail;
+import swen30006.automail.MailItem;
+import swen30006.automail.MailPool;
+import swen30006.simulation.Building;
+import swen30006.simulation.Clock;
+import swen30006.simulation.IMailDelivery;
+import swen30006.simulation.MailGenerator;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -33,7 +37,7 @@ public class Simulation {
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
-    	/** Load properties for swen30006.simulation based on either default or a properties file.**/
+    	/** Load properties for swen30006.swen30006.simulation based on either default or a properties file.**/
     	Properties automailProperties = setUpProperties();
     	
     	//An array list to record mails that have been delivered
@@ -69,7 +73,7 @@ public class Simulation {
 		}
         
         /**
-         * This code section is for running a swen30006.simulation
+         * This code section is for running a swen30006.swen30006.simulation
          */
         /* Instantiate MailPool and Automail */
      	MailPool mailPool = new MailPool(NUM_ROBOTS);
