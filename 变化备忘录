@@ -1,0 +1,27 @@
+2021.4.6:
+
+0. Simulation类移到了automail包下，因为作业需求文档规定了入口类Simulation包含于automail包中。
+
+1. 添加了ChargeCalculator静态工具类， 包含计算Cost的方法。该方法会从`automail.properties`文件中读入 per activity unit 和
+Markup percentage 参数，并调用一次Modem模块取得不同楼层的ServiceFee，最后返回一个给定MailItem对象的Cost。方法会被MailPool和Robot共同调用。
+
+MailPool调用是为了，当pool遇到机器人来取件时，pool会遍历池子里的所有邮件计算它们的Cost有没有超过Cost Threshold，如果超过，会把这个邮件
+放到池子的邮件链表的头部，这样机器人就能优先取到了。
+
+Robot调用是因为，不同楼层的serviceFee会随时变化，当送到客户手里的时候，机器人还要再调用ChargeCalculator类里的方法来确认最新的收费标准，
+得到最新的cost，这样才能精确计费（并把计费结果打印出来）。
+
+ChargeCalculator 的 WifiModem 是Simulation类里初始化的(老师整的)，通过setter设置到ChargeCalculator类里。
+
+2. 因为最后投递结果是由MailItem打印的，所以在这个类里创建费用相关的属性，属性可以由ChargeCalculator类里的Cost计算方法修改（这个还没写）。
+
+3. MailPool新建了一个空白方法，用于计算邮件们的cost，并把超出阈值的邮件提到链表前面去（提升了优先级）：
+
+private void handlePriority(double chargeThreshold, LinkedList<Item> pool) {
+
+		// travel all items in the pool, and calc the charge
+		// if a item's charge exceeds threshold, move it to the head of the linked list
+		// if not exceed, continue traveling
+
+	}
+

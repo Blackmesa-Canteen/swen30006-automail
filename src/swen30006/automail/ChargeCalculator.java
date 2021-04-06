@@ -59,8 +59,10 @@ public class ChargeCalculator {
 
         double activityCost = (movementTotalUnits + lookUpTotalUnits) * activityUnitPrice;
 
+        double cost = floorServiceFee + activityCost;
+
         // this is the charge
-        return activityCost * (1 + markupPercentage);
+        return cost * (1 + markupPercentage);
     }
 
     // read configurable properties
