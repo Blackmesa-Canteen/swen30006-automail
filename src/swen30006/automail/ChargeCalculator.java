@@ -20,10 +20,9 @@ public class ChargeCalculator {
     private static WifiModem wifiModem;
 
     // these values are configurable according to the spec
-    private static double activityUnitPrice;
-    private static double markupPercentage;
+    private static double activityUnitPrice = 0.224;
+    private static double markupPercentage = 0.059;
 
-    // these values are not configurable...
     private static final double movementActivityUnits = 5;
     private static final double lookupActivityUnits  = 0.1;
 
@@ -34,11 +33,12 @@ public class ChargeCalculator {
     // calculate Charge, it can be called by MailPool (for priority sorting) and Robot(when arrive to the client)
     public static double CalcCharge(MailItem mailItem){
 
-        try {
-            readProperties();
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
+        /* we shouldn't add new properties to the automail.properties file */
+//        try {
+//            readProperties();
+//        } catch (ParseException | IOException e) {
+//            e.printStackTrace();
+//        }
 
         int destinationFloor = mailItem.getDestFloor();
         int mailRoomFloor = Building.MAILROOM_LOCATION;
@@ -66,6 +66,8 @@ public class ChargeCalculator {
     }
 
     // read configurable properties
+    // deprecated!
+    @Deprecated
     private static void readProperties() throws IOException, ParseException {
         Properties automailProperties = new Properties();
 
@@ -89,5 +91,13 @@ public class ChargeCalculator {
 
     public static void setWifiModem(WifiModem wifiModem) {
         ChargeCalculator.wifiModem = wifiModem;
+    }
+
+    public static void setActivityUnitPrice(double activityUnitPrice) {
+        ChargeCalculator.activityUnitPrice = activityUnitPrice;
+    }
+
+    public static void setMarkupPercentage(double markupPercentage) {
+        ChargeCalculator.markupPercentage = markupPercentage;
     }
 }
