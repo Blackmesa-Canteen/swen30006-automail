@@ -16,6 +16,7 @@ public class MailItem {
     protected double cost;
     protected double fee;
     protected double activity;
+    protected long numLookups;
 	
     /** Represents the destination floor to which the mail is intended to go */
     protected final int destination_floor;

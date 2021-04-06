@@ -55,14 +55,23 @@ public class ChargeCalculator {
         double movementTotalUnits = ((destinationFloor - mailRoomFloor) * 2) * movementActivityUnits;
 
         // user will be charged for only one look up fee per mail (see spec)
+        /* data look up fee need to ask teacher! */
         double lookUpTotalUnits = 1 * lookupActivityUnits;
 
         double activityCost = (movementTotalUnits + lookUpTotalUnits) * activityUnitPrice;
 
         double cost = floorServiceFee + activityCost;
 
+        double charge = cost * (1 + markupPercentage);
+
+        mailItem.charge = charge;
+        mailItem.cost = cost;
+        mailItem.fee = floorServiceFee;
+        /* data look up fee need to ask teacher! */
+        mailItem.activity = movementTotalUnits + lookUpTotalUnits;
+
         // this is the charge
-        return cost * (1 + markupPercentage);
+        return charge;
     }
 
     // read configurable properties
