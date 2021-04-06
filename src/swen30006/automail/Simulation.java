@@ -67,6 +67,10 @@ public class Simulation {
         try {
         	System.out.println("Setting up Wifi Modem");
         	wModem = WifiModem.getInstance(Building.MAILROOM_LOCATION);
+
+        	// attach wifiModem to charge Calculator
+        	ChargeCalculator.setWifiModem(wModem);
+
 			System.out.println(wModem.Turnon());
 		} catch (Exception mException) {
 			mException.printStackTrace();
@@ -109,7 +113,7 @@ public class Simulation {
     	automailProperties.setProperty("Mail_to_Create", "80");
     	automailProperties.setProperty("ChargeThreshold", "0");
     	automailProperties.setProperty("ChargeDisplay", "false");
-    	
+
     	// Read properties
 		FileReader inStream = null;
 		try {

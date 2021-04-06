@@ -48,7 +48,7 @@ public class MailPool {
 	}
 
 	/**
-     * Adds an item to the mail pool
+     * Adds an item to the mail pool, is sorted by destinations
      * @param mailItem the mail item being added.
      */
 	public void addToPool(MailItem mailItem) {
@@ -90,6 +90,16 @@ public class MailPool {
 	            throw e; 
 	        } 
 		}
+	}
+
+	/* every time robot arrived, the mail pool will calc charge of each
+	* mail item and move items whose charge exceeds threshold to the head of the linkedList */
+	private void handlePriority(double chargeThreshold, LinkedList<Item> pool) {
+
+		// travel all items in the pool, and calc the charge
+		// if a item's charge exceeds threshold, move it to the head of the linked list
+		// if not exceed, continue traveling
+
 	}
 
 	/**

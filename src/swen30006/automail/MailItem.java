@@ -9,6 +9,13 @@ import java.util.TreeMap;
  * Represents a mail item
  */
 public class MailItem {
+
+
+    /* Added new attributes to be printed */
+    protected double charge;
+    protected double cost;
+    protected double fee;
+    protected double activity;
 	
     /** Represents the destination floor to which the mail is intended to go */
     protected final int destination_floor;
