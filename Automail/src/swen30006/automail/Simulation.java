@@ -4,20 +4,16 @@ import com.unimelb.swen30006.wifimodem.WifiModem;
 import swen30006.exceptions.ExcessiveDeliveryException;
 import swen30006.exceptions.ItemTooHeavyException;
 import swen30006.exceptions.MailAlreadyDeliveredException;
+import swen30006.simulation.Building;
+import swen30006.simulation.Clock;
+import swen30006.simulation.IMailDelivery;
+import swen30006.simulation.MailGenerator;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-
-import swen30006.automail.Automail;
-import swen30006.automail.MailItem;
-import swen30006.automail.MailPool;
-import swen30006.simulation.Building;
-import swen30006.simulation.Clock;
-import swen30006.simulation.IMailDelivery;
-import swen30006.simulation.MailGenerator;
 
 /**
  * This class simulates the behaviour of AutoMail

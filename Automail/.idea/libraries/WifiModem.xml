@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="WifiModem">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WifiModem.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
