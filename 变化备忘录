@@ -37,3 +37,5 @@ private void handlePriority(double chargeThreshold, LinkedList<Item> pool) {
 4. 增加了一个查询结果类，结果类包含当前查询的尝试次数和任意类型的返回值。主要是为了取出当前的尝试次数方便而设立的。
 5. 移动ChargeCalculator类到了simulation包下.
 
+2021.4.10:
+0. handle priority的method， 将大于threshold的mail提前，并按照destination_floor排序。
