@@ -25,3 +25,15 @@ private void handlePriority(double chargeThreshold, LinkedList<Item> pool) {
 
 	}
 
+
+2021.4.8:
+
+0. 将路由器接口从ChargeCalculator移出，并放在了一个新类ModemAdapter， ModemAdapter类由Simulation类初始化成一个实例，包含该路由器的所有连接信息，并对外
+提供查询API. ChargeCalculator的calcCharge方法将调用这个API实现Service fee 查询，查询产生的状态信息由ModemAdapter保存.
+1. 将和Charge有关的参数（比如收费阈值之类的）从MailPool类中剥离开来并放到ChargeCalculator类中，减少了MailPool和Simulation的耦合(之前要从Simulation
+获得收费阈值)，并提高了ChargeCalculator和MailPool的内聚。ChargeCalculator的所有和Charge计算有关的参数常量由Simulation类进行配置
+2. 添加了MailItem的新的log打印方法,并添加了新的统计信息在Simulation结果打印中，可以根据设置Simulation的Charge_Display选择打印与否(作业要求)。
+3. 在MailItem里添加了部分每份邮件各自的Charge信息。
+4. 增加了一个查询结果类，结果类包含当前查询的尝试次数和任意类型的返回值。主要是为了取出当前的尝试次数方便而设立的。
+5. 移动ChargeCalculator类到了simulation包下.
+

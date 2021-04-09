@@ -15,9 +15,16 @@ public class MailItem {
     protected double charge;
     protected double cost;
     protected double fee;
+
+    // This is real total activity cost (all failed look up included)
     protected double activity;
-    protected long numLookups;
-	
+
+    // this is real accumulated look up activities (failed lookup activities included)
+    protected double realLookupActivities;
+
+    // This is billable activity cost (NO failed lookup activities included)
+    protected double billableActivities;
+
     /** Represents the destination floor to which the mail is intended to go */
     protected final int destination_floor;
     /** The mail identifier */
@@ -38,11 +45,22 @@ public class MailItem {
         this.id = String.valueOf(hashCode());
         this.arrival_time = arrival_time;
         this.weight = weight;
+        this.charge = 0;
+        this.cost = 0;
+        this.fee = 0;
+        this.activity = 0;
+        this.realLookupActivities = 0;
     }
 
     @Override
     public String toString(){
         return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d", id, arrival_time, destination_floor, weight);
+    }
+
+    public String toStringWithExtraInfo() {
+        return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d | Charge: %.2f | Cost: %.2f " +
+                        "| Fee: %.2f | Activity: %.2f",
+                id, arrival_time, destination_floor, weight, charge, cost, fee, activity);
     }
 
     /**
@@ -87,4 +105,55 @@ public class MailItem {
 		if (hash == null) { hash = count++; hashMap.put(hash0, hash); }
 		return hash;
 	}
+
+    public void updateMailBillInfo(double floorServiceFee, double movementTotalUnits,
+                                   double realLookUpTotalUnitsForThisTime, double cost, double charge,
+                                   double billableActivities) {
+        this.charge = charge;
+        this.cost = cost;
+        this.fee = floorServiceFee;
+
+        // accumulation of two lookup activities
+        this.realLookupActivities += realLookUpTotalUnitsForThisTime;
+
+        // billable activities (don't include failed lookups)
+        // update billable activities of this mailitem
+        this.billableActivities = billableActivities;
+
+        // real activity cost (includes all failed lookup activities)
+        // movement Activities (latest) + 2 times of real lookup activities(failed + successful)
+        this.activity = movementTotalUnits + this.realLookupActivities;
+    }
+
+    public double getCharge() {
+        return charge;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public double getFee() {
+        return fee;
+    }
+
+    public double getActivity() {
+        return activity;
+    }
+
+    public double getRealLookupActivities() {
+        return realLookupActivities;
+    }
+
+    public double getBillableActivities() {
+        return billableActivities;
+    }
+
+    public int getDestination_floor() {
+        return destination_floor;
+    }
+
+    public int getArrival_time() {
+        return arrival_time;
+    }
 }

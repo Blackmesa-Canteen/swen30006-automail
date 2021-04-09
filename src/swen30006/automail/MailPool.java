@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.ListIterator;
 
 import swen30006.exceptions.ItemTooHeavyException;
+import swen30006.simulation.ChargeCalculator;
 
 /**
  * addToPool is called when there are mail items newly arrived at the building to add to the MailPool or
@@ -76,6 +77,7 @@ public class MailPool {
 		assert(robot.isEmpty());
 		// System.out.printf("P: %3d%n", pool.size());
 		ListIterator<Item> j = pool.listIterator();
+
 		if (pool.size() > 0) {
 			try {
 			robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
@@ -94,11 +96,29 @@ public class MailPool {
 
 	/* every time robot arrived, the mail pool will calc charge of each
 	* mail item and move items whose charge exceeds threshold to the head of the linkedList */
-	private void handlePriority(double chargeThreshold, LinkedList<Item> pool) {
+	private void handlePriority(LinkedList<Item> pool) {
+
+		// if charge threshold is zero, which means we don't need to handle priority
+		// we put Threshold in ChargeCalculator to avoid MailPool coupling with Simulation class, while
+		// ChargeCalculator already has coupling with Simulation class
+		if(ChargeCalculator.getChargeThreshold() == 0) {
+			return;
+		}
 
 		// travel all items in the pool, and calc the charge
 		// if a item's charge exceeds threshold, move it to the head of the linked list
 		// if not exceed, continue traveling
+		for(Item item : pool) {
+			MailItem mailItem = item.mailItem;
+			double mailCharge = ChargeCalculator.CalcCharge(mailItem);
+			if (mailCharge > ChargeCalculator.getChargeThreshold()) {
+				// do something
+				;
+			} else {
+				// check next mail item
+				continue;
+			}
+		}
 
 	}
 

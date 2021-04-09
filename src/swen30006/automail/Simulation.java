@@ -4,16 +4,14 @@ import com.unimelb.swen30006.wifimodem.WifiModem;
 import swen30006.exceptions.ExcessiveDeliveryException;
 import swen30006.exceptions.ItemTooHeavyException;
 import swen30006.exceptions.MailAlreadyDeliveredException;
-import swen30006.simulation.Building;
-import swen30006.simulation.Clock;
-import swen30006.simulation.IMailDelivery;
-import swen30006.simulation.MailGenerator;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+
+import swen30006.simulation.*;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -30,6 +28,14 @@ public class Simulation {
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
     private static WifiModem wModem = null;
+
+    private static ModemAdapter modemAdapter = null;
+
+    // New features:
+    // private static long numItemsDelivered = 0;
+    private static double totalBillableActivity = 0;
+    private static double totalActivityCost = 0;
+    private static double totalServiceCost = 0;
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -58,14 +64,25 @@ public class Simulation {
         }
         Integer seed = seedMap.get(true);
         System.out.println("#A Random Seed: " + (seed == null ? "null" : seed.toString()));
+
+		// New features
+        // configure ChargeCalculator
+		ChargeCalculator.setChargeThreshold(CHARGE_THRESHOLD);
+		ChargeCalculator.setActivityUnitPrice(0.224);
+		ChargeCalculator.setMarkupPercentage(0.059);
+		ChargeCalculator.setLookupActivityUnits(5);
+		ChargeCalculator.setMovementActivityUnits(0.1);
         
         // Install the modem & turn on the modem
         try {
         	System.out.println("Setting up Wifi Modem");
         	wModem = WifiModem.getInstance(Building.MAILROOM_LOCATION);
 
-        	// attach wifiModem to charge Calculator
-        	ChargeCalculator.setWifiModem(wModem);
+			// New features
+        	// create modemAdapter class and
+        	// attach it to charge Calculator
+			modemAdapter = new ModemAdapter(wModem);
+			ChargeCalculator.setModemAdapter(modemAdapter);
 
 			System.out.println(wModem.Turnon());
 		} catch (Exception mException) {
@@ -154,7 +171,21 @@ public class Simulation {
 		public void deliver(MailItem deliveryItem){
     		if(!MAIL_DELIVERED.contains(deliveryItem)){
     			MAIL_DELIVERED.add(deliveryItem);
-                System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
+
+    			// New feature: calculate statistic tracking data
+    			totalBillableActivity += deliveryItem.getBillableActivities();
+    			totalActivityCost += deliveryItem.getActivity();
+    			// not sure
+				totalServiceCost += deliveryItem.getCharge();
+
+				if(!CHARGE_DISPLAY) {
+					// original log
+					System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toString());
+				} else {
+					// new log with extra information
+					System.out.printf("T: %3d > Delivered(%4d) [%s]%n", Clock.Time(), MAIL_DELIVERED.size(), deliveryItem.toStringWithExtraInfo());
+				}
+
     			// Calculate delivery score
     			total_delay += calculateDeliveryDelay(deliveryItem);
     		}
@@ -181,5 +212,15 @@ public class Simulation {
         System.out.println("T: "+Clock.Time()+" | Simulation complete!");
         System.out.println("Final Delivery time: "+Clock.Time());
         System.out.printf("Delay: %.2f%n", total_delay);
+        
+        // add new statistics tracking
+		if(CHARGE_DISPLAY) {
+			System.out.printf("The total number of items delivered: %d%n", MAIL_DELIVERED.size());
+			System.out.printf("The total billable activity: %.2f%n", totalBillableActivity);
+			System.out.printf("The total activity cost: %.2f%n", totalActivityCost);
+			System.out.printf("The total service cost: %.2f%n", totalServiceCost);
+			System.out.printf("The total successful lookups: %d%n", modemAdapter.getTotalSuccessfulLookups());
+			System.out.printf("The total failed lookups: %d%n", modemAdapter.getTotalFailedLookups());
+		}
     }
 }
