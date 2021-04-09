@@ -1,5 +1,7 @@
 package swen30006.automail;
 
+import swen30006.simulation.ChargeCalculator;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,6 +17,9 @@ public class MailItem {
     protected double charge;
     protected double cost;
     protected double fee;
+
+    /* This is the expected charge estimated when adding*/
+    protected double expectedCost;
 
     // This is real total activity cost (all failed look up included)
     protected double activity;
@@ -50,6 +55,7 @@ public class MailItem {
         this.fee = 0;
         this.activity = 0;
         this.realLookupActivities = 0;
+
     }
 
     @Override

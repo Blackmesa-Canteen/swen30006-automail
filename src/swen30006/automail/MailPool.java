@@ -39,6 +39,8 @@ public class MailPool {
 		}
 	}
 	
+
+
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
 
@@ -109,11 +111,14 @@ public class MailPool {
 		// if a item's charge exceeds threshold, move it to the head of the linked list
 		// if not exceed, continue traveling
 		for(Item item : pool) {
+			int index = 0;
 			MailItem mailItem = item.mailItem;
 			double mailCharge = ChargeCalculator.CalcCharge(mailItem);
 			if (mailCharge > ChargeCalculator.getChargeThreshold()) {
-				// do something
-				;
+				//do something
+				pool.remove(item);
+				pool.add(index,item);
+				index++;
 			} else {
 				// check next mail item
 				continue;
