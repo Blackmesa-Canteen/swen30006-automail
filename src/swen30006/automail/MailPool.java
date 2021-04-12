@@ -111,19 +111,18 @@ public class MailPool {
 		// if a item's charge exceeds threshold, move it to the head of the linked list
 		// if not exceed, continue traveling
 		int index = 0;
-		for(Item item : pool) {
+		for(int i =0;i<pool.size();i++) {
+			Item item = pool.get(i);
 			MailItem mailItem = item.mailItem;
 			double mailCharge = ChargeCalculator.CalcCharge(mailItem);
-			if (index ==2 ){
+			if (index ==2){
 				break;
 			}
-			if (mailCharge > ChargeCalculator.getChargeThreshold() && index < 2) {
+			if (mailCharge > ChargeCalculator.getChargeThreshold()) {
 				//do something
-				pool.set(index,item);
+				pool.remove(item);
+				pool.add(index,item);
 				index++;
-			} else {
-				// check next mail item
-				continue;
 			}
 		}
 	}
