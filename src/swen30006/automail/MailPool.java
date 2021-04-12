@@ -114,6 +114,9 @@ public class MailPool {
 		for(Item item : pool) {
 			MailItem mailItem = item.mailItem;
 			double mailCharge = ChargeCalculator.CalcCharge(mailItem);
+			if (index ==2 ){
+				break;
+			}
 			if (mailCharge > ChargeCalculator.getChargeThreshold() && index < 2) {
 				//do something
 				pool.set(index,item);
