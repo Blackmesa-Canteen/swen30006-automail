@@ -3,6 +3,7 @@ package swen30006.automail;
 import swen30006.exceptions.ExcessiveDeliveryException;
 import swen30006.exceptions.ItemTooHeavyException;
 import swen30006.simulation.Building;
+import swen30006.simulation.ChargeCalculator;
 import swen30006.simulation.Clock;
 import swen30006.simulation.IMailDelivery;
 
@@ -99,7 +100,7 @@ public class Robot {
                     if(tube == null){
                     	changeState(RobotState.RETURNING);
                     }
-                    else{
+                    else {
                         /** If there is another item, set the robot's route to the location to deliver the item */
                         deliveryItem = tube;
                         tube = null;
