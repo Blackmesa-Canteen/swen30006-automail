@@ -26,14 +26,12 @@ public class Robot {
     
     private MailItem deliveryItem = null;
     private MailItem tube = null;
-    
-    private int deliveryCounter;
-    
+
+    private int deliveryCounter = 0;
 
     /**
      * Initiates the robot's location at the start to be at the mailroom
      * also set it to be waiting for mail.
-     * @param behaviour governs selection of mail items for delivery and behaviour on priority arrivals
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
@@ -76,8 +74,8 @@ public class Robot {
                 } else {
                 	/** If the robot is not at the mailroom floor yet, then move towards it! */
                     moveTowards(Building.MAILROOM_LOCATION);
-                	break;
                 }
+                break;
     		case WAITING:
                 /** If the StorageTube is ready and the Robot is waiting in the mailroom then start the delivery */
                 if(!isEmpty() && receivedDispatch){
@@ -85,14 +83,22 @@ public class Robot {
                 	deliveryCounter = 0; // reset delivery counter
                 	setDestination();
                 	changeState(RobotState.DELIVERING);
+
+                	// new features: calculate mails' movements when start delivering
+                    calcMailsMovements(deliveryItem, tube);
                 }
                 break;
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
                     delivery.deliver(deliveryItem);
+
+                    // new features: calculate charge
+                    calcLatestMailCharge(deliveryItem);
+
                     deliveryItem = null;
                     deliveryCounter++;
+
                     if(deliveryCounter > 2){  // Implies a swen30006.swen30006.simulation bug
                     	throw new ExcessiveDeliveryException();
                     }
@@ -109,7 +115,7 @@ public class Robot {
                     }
     			} else {
 	        		/** The robot is not at the destination yet, move towards it! */
-	                moveTowards(destination_floor);
+	        		moveTowards(destination_floor);
     			}
                 break;
     	}
@@ -173,5 +179,56 @@ public class Robot {
 		tube = mailItem;
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
+
+	public void calcMailsMovements(MailItem hand, MailItem tube) {
+
+        // if the mail in the hand is the first mail needs to be delivered
+        if(deliveryCounter == 0) {
+            // Only one mail needs to be delivered: the mail in the hand is the first one, while nothing in the tube.
+            if(tube == null) {
+                int movements = Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()) * 2;
+                hand.accumulateMailMovements(movements);
+            } else {
+                // if the mailroom is between 2 destinations
+                if(((hand.getDestFloor() < mailPool.getMailroomLocation()) && (tube.getDestFloor() > mailPool.getMailroomLocation())) ||
+                        (hand.getDestFloor() > mailPool.getMailroomLocation() && tube.getDestFloor() < mailPool.getMailroomLocation())) {
+                    hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()) * 2);
+                    tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()) * 2);
+                } else if ((hand.getDestFloor() >= mailPool.getMailroomLocation()) && (tube.getDestFloor() >= mailPool.getMailroomLocation())) {
+                    // if the mailroom is under both mailitems' destinations
+                    if(hand.getDestFloor() <= tube.getDestFloor()) {
+
+                        hand.accumulateMailMovements(hand.getDestFloor() - mailPool.getMailroomLocation());
+                        tube.accumulateMailMovements((tube.getDestFloor() - hand.getDestFloor()) * 2 +
+                                (hand.getDestFloor() - mailPool.getMailroomLocation()));
+
+                    } else {
+
+                        hand.accumulateMailMovements((hand.getDestFloor() - tube.getDestFloor()) * 2 +
+                                (tube.getDestFloor() - mailPool.getMailroomLocation()));
+                        tube.accumulateMailMovements((tube.getDestFloor() - mailPool.getMailroomLocation()));
+                    }
+                } else {
+                    // if the mail room is above both mailitem's destinations
+                    if(hand.getDestFloor() <= tube.getDestFloor()) {
+
+                        hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - tube.getDestFloor()) * 2 +
+                                Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()));
+                        tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()));
+
+                    } else {
+                        hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()));
+                        tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - hand.getDestFloor()) * 2 +
+                                Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()));
+
+                    }
+                }
+            }
+        }
+    }
+
+	public void calcLatestMailCharge(MailItem item) {
+        ChargeCalculator.CalcCharge(item, item.getMovements(), true);
+    }
 
 }

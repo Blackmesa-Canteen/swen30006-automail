@@ -2,12 +2,6 @@ package swen30006.simulation;
 
 import swen30006.automail.MailItem;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-import java.text.NumberFormat;
-import java.text.ParseException;
-
 /**
  * @program Automail
  * @description since this calculator will be called by MailPool & Robot, so make this as a Util class and couple with
@@ -21,21 +15,18 @@ public class ChargeCalculator {
 
     // these values are configurable according to the spec
     // user can configure them with setters in Simulation class
-    private static double activityUnitPrice;
-    private static double markupPercentage;
+    private static double activityUnitPrice = 0.224;
+    private static double markupPercentage = 0.059;
 
-    private static double movementActivityUnits;
-    private static double lookupActivityUnits;
+    private static double movementActivityUnits = 0.1;
+    private static double lookupActivityUnits = 5;
 
     // something may need in the future:
     private static double weightCharge;
     private static double penalty;
 
-    // calculate Charge, it can be reused by MailPool (for priority sorting) and Robot(when arrive to the client)
-    public static double CalcCharge(MailItem mailItem){
-
+    public static double CalcCharge(MailItem mailItem, int movements, boolean updateBillInfo){
         int destinationFloor = mailItem.getDestFloor();
-        int mailRoomFloor = Building.MAILROOM_LOCATION;
         double floorServiceFee = -1D;
 
         long numLookupsForThisTime = 0;
@@ -45,8 +36,8 @@ public class ChargeCalculator {
         numLookupsForThisTime = queryResult.getNumLookups();
         queryResult = null;
 
-        // Mailroom -> DestinationFloor -> Mailroom. (see Discussion on Canvas)
-        double movementTotalUnits = ((destinationFloor - mailRoomFloor) * 2) * movementActivityUnits;
+        // if the mail has been put back to the pool, calc accumulated movements
+        double movementTotalUnits = (movements + mailItem.getMovements()) * movementActivityUnits;
 
         // user will be charged for only one look up fee per mail (see spec)
         double chargedLookUpTotalUnits = 1 * lookupActivityUnits;
@@ -59,36 +50,22 @@ public class ChargeCalculator {
 
         double charge = cost * (1 + markupPercentage);
 
-        // update infomation in the mailItem object with the latest data
-        mailItem.updateMailBillInfo(floorServiceFee, movementTotalUnits, realLookUpTotalUnitsForThisTime,
-                cost, charge, billableActivityCost);
+        // update information in the mailItem object with the latest billing data
+        if(updateBillInfo) {
 
-        // this is the charge
-        return charge;
-    }
+            mailItem.accumulateMailMovements(movements);
 
-    // read configurable properties
-    // deprecated!
-    @Deprecated
-    private static void readProperties() throws IOException, ParseException {
-        Properties automailProperties = new Properties();
-
-        // Read properties files
-        FileReader inStream = null;
-        try {
-            inStream = new FileReader("automail.properties");
-            automailProperties.load(inStream);
-        } finally {
-            if (inStream != null) {
-                inStream.close();
-            }
+            mailItem.setCharge(charge);
+            mailItem.setFee(floorServiceFee);
+            mailItem.setCost(cost);
+            mailItem.setActivity(movementTotalUnits + mailItem.getRealLookupActivities());
+            mailItem.setBillableActivities(movementTotalUnits + chargedLookUpTotalUnits);
         }
 
-        activityUnitPrice = Double.parseDouble(automailProperties.getProperty("Activity_Unit_Price"));
+        mailItem.accumulateMailLookupInfo(realLookUpTotalUnitsForThisTime);
 
-        // parse percentage String to Double
-        NumberFormat nf=NumberFormat.getPercentInstance();
-        markupPercentage = (double) nf.parse(automailProperties.getProperty("Markup_Percentage"));
+        // this is the estimated charge
+        return charge;
     }
 
     public static void setActivityUnitPrice(double activityUnitPrice) {

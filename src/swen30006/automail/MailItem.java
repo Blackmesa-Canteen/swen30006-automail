@@ -15,11 +15,11 @@ public class MailItem {
 
     /* Added new attributes to be printed */
     protected double charge;
+    protected double estimatedCharge;
     protected double cost;
     protected double fee;
 
-    /* This is the expected charge estimated when adding*/
-    protected double expectedCost;
+    protected int movements;
 
     // This is real total activity cost (all failed look up included)
     protected double activity;
@@ -51,10 +51,12 @@ public class MailItem {
         this.arrival_time = arrival_time;
         this.weight = weight;
         this.charge = 0;
+        this.estimatedCharge = 0;
         this.cost = 0;
         this.fee = 0;
         this.activity = 0;
         this.realLookupActivities = 0;
+        this.movements = 0;
 
     }
 
@@ -112,23 +114,26 @@ public class MailItem {
 		return hash;
 	}
 
-    public void updateMailBillInfo(double floorServiceFee, double movementTotalUnits,
-                                   double realLookUpTotalUnitsForThisTime, double cost, double charge,
-                                   double billableActivities) {
-        this.charge = charge;
-        this.cost = cost;
-        this.fee = floorServiceFee;
-
+    public void accumulateMailLookupInfo(double realLookUpTotalUnitsForThisTime) {
         // accumulation of two lookup activities
         this.realLookupActivities += realLookUpTotalUnitsForThisTime;
+    }
 
-        // billable activities (don't include failed lookups)
-        // update billable activities of this mailitem
-        this.billableActivities = billableActivities;
+    public void accumulateMailMovements(double newMovements) {
+        // accumulation for movements
+	    this.movements += newMovements;
+    }
 
-        // real activity cost (includes all failed lookup activities)
-        // movement Activities (latest) + 2 times of real lookup activities(failed + successful)
-        this.activity = movementTotalUnits + this.realLookupActivities;
+    public void setCharge(double charge) {
+        this.charge = charge;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
     }
 
     public double getCharge() {
@@ -147,6 +152,10 @@ public class MailItem {
         return activity;
     }
 
+    public void setActivity(double activity) {
+        this.activity = activity;
+    }
+
     public double getRealLookupActivities() {
         return realLookupActivities;
     }
@@ -155,11 +164,31 @@ public class MailItem {
         return billableActivities;
     }
 
+    public void setBillableActivities(double billableActivities) {
+        this.billableActivities = billableActivities;
+    }
+
     public int getDestination_floor() {
         return destination_floor;
     }
 
     public int getArrival_time() {
         return arrival_time;
+    }
+
+    public double getEstimatedCharge() {
+        return estimatedCharge;
+    }
+
+    public void setEstimatedCharge(double estimatedCharge) {
+        this.estimatedCharge = estimatedCharge;
+    }
+
+    public int getMovements() {
+        return movements;
+    }
+
+    public void setMovements(int movements) {
+        this.movements = movements;
     }
 }

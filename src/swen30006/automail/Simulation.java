@@ -68,10 +68,6 @@ public class Simulation {
 		// New features
         // configure ChargeCalculator
 		ChargeCalculator.setChargeThreshold(CHARGE_THRESHOLD);
-		ChargeCalculator.setActivityUnitPrice(0.224);
-		ChargeCalculator.setMarkupPercentage(0.059);
-		ChargeCalculator.setLookupActivityUnits(5);
-		ChargeCalculator.setMovementActivityUnits(0.1);
         
         // Install the modem & turn on the modem
         try {
@@ -93,7 +89,7 @@ public class Simulation {
          * This code section is for running a swen30006.swen30006.simulation
          */
         /* Instantiate MailPool and Automail */
-     	MailPool mailPool = new MailPool(NUM_ROBOTS);
+     	MailPool mailPool = new MailPool(NUM_ROBOTS, Building.MAILROOM_LOCATION);
         Automail automail = new Automail(mailPool, new ReportDelivery(), NUM_ROBOTS);
         MailGenerator mailGenerator = new MailGenerator(MAIL_TO_CREATE, MAIL_MAX_WEIGHT, mailPool, seedMap);
         

@@ -25,7 +25,8 @@ public class MailPool {
 			this.mailItem = mailItem;
 		}
 	}
-	
+
+	// Descending order
 	public class ItemComparator implements Comparator<Item> {
 		@Override
 		public int compare(Item i1, Item i2) {
@@ -43,11 +44,13 @@ public class MailPool {
 
 	private LinkedList<Item> pool;
 	private LinkedList<Robot> robots;
+	private final int mailroomLocation;
 
-	public MailPool(int nrobots){
+	public MailPool(int nrobots, int mailroomLocation){
 		// Start empty
 		pool = new LinkedList<Item>();
 		robots = new LinkedList<Robot>();
+		this.mailroomLocation = mailroomLocation;
 	}
 
 	/**
@@ -69,6 +72,11 @@ public class MailPool {
 		//List available robots
 		ListIterator<Robot> i = robots.listIterator();
 		while (i.hasNext()) {
+
+			// new feature
+			// put high priority mailItems at the head of the pool
+			handlePriority(pool);
+
 			loadItem(i);
 		}
 	}
@@ -113,7 +121,7 @@ public class MailPool {
 		int index = 0;
 		for(Item item : pool) {
 			MailItem mailItem = item.mailItem;
-			double mailCharge = ChargeCalculator.CalcCharge(mailItem);
+			double mailCharge = estimateCharge(mailItem);
 			if (index ==2 ){
 				break;
 			}
@@ -128,6 +136,23 @@ public class MailPool {
 		}
 	}
 
+	// Estimate Charge
+	public double estimateCharge(MailItem mailItem){
+
+		int destinationFloor = mailItem.getDestFloor();
+
+		// Mailroom -> DestinationFloor -> Mailroom.
+		// Cost the whole round trip as though the one item is being delivered on its own
+		int movements = (Math.abs(destinationFloor - mailroomLocation) * 2);
+
+		// this is the estimated charge
+		double estimatedCharge = ChargeCalculator.CalcCharge(mailItem, movements, false);
+
+		// store estimated Charge to mailItem for sorting
+		mailItem.setEstimatedCharge(estimatedCharge);
+		return estimatedCharge;
+	}
+
 	/**
      * @param robot refers to a robot which has arrived back ready for more mailItems to deliver
      */	
@@ -135,4 +160,7 @@ public class MailPool {
 		robots.add(robot);
 	}
 
+	public int getMailroomLocation() {
+		return mailroomLocation;
+	}
 }
