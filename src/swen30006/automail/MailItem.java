@@ -19,7 +19,7 @@ public class MailItem {
     protected double cost;
     protected double fee;
 
-    // robot movements required to deliver this mailitem
+    // robot movements required to deliver this mailItem
     protected int movements;
 
     // This is real total activity cost (all failed look up included)

@@ -67,6 +67,24 @@ public class ChargeCalculator {
         // this is the estimated charge
         return charge;
     }
+
+    // Estimate Charge
+    public static double estimateCharge(MailItem mailItem, int mailroomLocation){
+
+        int destinationFloor = mailItem.getDestFloor();
+
+        // Mailroom -> DestinationFloor -> Mailroom.
+        // Cost the whole round trip as though the one item is being delivered on its own
+        int movements = (Math.abs(destinationFloor - mailroomLocation) * 2);
+
+        // this is the estimated charge
+        double estimatedCharge = ChargeCalculator.CalcCharge(mailItem, movements, false);
+
+        // store estimated Charge to mailItem for sorting
+        mailItem.setEstimatedCharge(estimatedCharge);
+        return estimatedCharge;
+    }
+
     
     public static void setActivityUnitPrice(double activityUnitPrice) {
         ChargeCalculator.activityUnitPrice = activityUnitPrice;

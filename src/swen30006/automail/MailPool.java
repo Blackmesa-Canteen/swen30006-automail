@@ -136,7 +136,7 @@ public class MailPool {
 				mailCharge = serviceFeeMap.get(mailItem.getDestFloor());
 			} else {
 				// if the service fee for this floor has not been looked up
-				mailCharge = estimateCharge(mailItem);
+				mailCharge = ChargeCalculator.estimateCharge(mailItem, mailroomLocation);
 				serviceFeeMap.put(mailItem.getDestFloor(), mailCharge);
 			}
 
@@ -152,21 +152,21 @@ public class MailPool {
 	}
 
 	// Estimate Charge
-	public double estimateCharge(MailItem mailItem){
-
-		int destinationFloor = mailItem.getDestFloor();
-
-		// Mailroom -> DestinationFloor -> Mailroom.
-		// Cost the whole round trip as though the one item is being delivered on its own
-		int movements = (Math.abs(destinationFloor - mailroomLocation) * 2);
-
-		// this is the estimated charge
-		double estimatedCharge = ChargeCalculator.CalcCharge(mailItem, movements, false);
-
-		// store estimated Charge to mailItem for sorting
-		mailItem.setEstimatedCharge(estimatedCharge);
-		return estimatedCharge;
-	}
+//	public double estimateCharge(MailItem mailItem){
+//
+//		int destinationFloor = mailItem.getDestFloor();
+//
+//		// Mailroom -> DestinationFloor -> Mailroom.
+//		// Cost the whole round trip as though the one item is being delivered on its own
+//		int movements = (Math.abs(destinationFloor - mailroomLocation) * 2);
+//
+//		// this is the estimated charge
+//		double estimatedCharge = ChargeCalculator.CalcCharge(mailItem, movements, false);
+//
+//		// store estimated Charge to mailItem for sorting
+//		mailItem.setEstimatedCharge(estimatedCharge);
+//		return estimatedCharge;
+//	}
 
 	/**
      * @param robot refers to a robot which has arrived back ready for more mailItems to deliver

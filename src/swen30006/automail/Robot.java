@@ -92,7 +92,7 @@ public class Robot {
     			if(current_floor == destination_floor){ // If already here drop off either way
 
                     // new features: calculate charge
-                    calcLatestMailCharge(deliveryItem);
+                    ChargeCalculator.CalcCharge(deliveryItem, deliveryItem.getMovements(), true);
 
     			    /** Delivery complete, report this to the simulator! */
                     delivery.deliver(deliveryItem);
@@ -227,9 +227,4 @@ public class Robot {
             }
         }
     }
-
-	public void calcLatestMailCharge(MailItem item) {
-        ChargeCalculator.CalcCharge(item, item.getMovements(), true);
-    }
-
 }
