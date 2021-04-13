@@ -121,7 +121,7 @@ public class Simulation {
     	automailProperties.setProperty("Floors", "10");
     	automailProperties.setProperty("Mail_to_Create", "80");
     	automailProperties.setProperty("ChargeThreshold", "0");
-    	automailProperties.setProperty("ChargeDisplay", "false");
+    	automailProperties.setProperty("CommercialDisplay", "false");
 
     	// Read properties
 		FileReader inStream = null;
@@ -154,7 +154,7 @@ public class Simulation {
 		CHARGE_THRESHOLD = Double.parseDouble(automailProperties.getProperty("ChargeThreshold"));
 		System.out.println("#Charge Threshold: " + CHARGE_THRESHOLD);
 		// Charge Display
-		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("ChargeDisplay"));
+		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("CommercialDisplay"));
 		System.out.println("#Charge Display: " + CHARGE_DISPLAY);
 		
 		return automailProperties;

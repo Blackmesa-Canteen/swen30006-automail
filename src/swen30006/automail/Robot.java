@@ -90,11 +90,12 @@ public class Robot {
                 break;
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
-                    /** Delivery complete, report this to the simulator! */
-                    delivery.deliver(deliveryItem);
 
                     // new features: calculate charge
                     calcLatestMailCharge(deliveryItem);
+
+    			    /** Delivery complete, report this to the simulator! */
+                    delivery.deliver(deliveryItem);
 
                     deliveryItem = null;
                     deliveryCounter++;
@@ -209,7 +210,7 @@ public class Robot {
                         tube.accumulateMailMovements((tube.getDestFloor() - mailPool.getMailroomLocation()));
                     }
                 } else {
-                    // if the mail room is above both mailitem's destinations
+                    // if the mail room is above both mailItem's destinations
                     if(hand.getDestFloor() <= tube.getDestFloor()) {
 
                         hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - tube.getDestFloor()) * 2 +

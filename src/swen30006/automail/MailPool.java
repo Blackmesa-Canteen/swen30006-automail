@@ -1,5 +1,6 @@
 package swen30006.automail;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.ListIterator;
@@ -74,7 +75,7 @@ public class MailPool {
 		while (i.hasNext()) {
 
 			// new feature
-			// put high priority mailItems at the head of the pool
+			// put 2 high priority mailItems at the head of the pool
 			handlePriority(pool);
 
 			loadItem(i);
@@ -105,7 +106,7 @@ public class MailPool {
 	}
 
 	/* every time robot arrived, the mail pool will calc charge of each
-	* mail item and move items whose charge exceeds threshold to the head of the linkedList */
+	* mail item and move 2 items whose charge exceeds threshold to the head of the linkedList */
 	private void handlePriority(LinkedList<Item> pool) {
 
 		// if charge threshold is zero, which means we don't need to handle priority
@@ -115,25 +116,39 @@ public class MailPool {
 			return;
 		}
 
+		HashMap<Integer, Double> serviceFeeMap = new HashMap<>();
+
 		// travel all items in the pool, and calc the charge
 		// if a item's charge exceeds threshold, move it to the head of the linked list
 		// if not exceed, continue traveling
 		int index = 0;
-		for(Item item : pool) {
-			MailItem mailItem = item.mailItem;
-			double mailCharge = estimateCharge(mailItem);
-			if (index ==2 ){
+		for(int i =0;i<pool.size();i++) {
+			// only put 2 high priority mail at the head of the linked list
+			if (index ==2){
 				break;
 			}
-			if (mailCharge > ChargeCalculator.getChargeThreshold() && index < 2) {
-				//do something
-				pool.set(index,item);
-				index++;
+			Item item = pool.get(i);
+			MailItem mailItem = item.mailItem;
+			double mailCharge = 0;
+
+			if(serviceFeeMap.containsKey(mailItem.getDestFloor())) {
+				// if the service fee for this floor has been looked up
+				mailCharge = serviceFeeMap.get(mailItem.getDestFloor());
 			} else {
-				// check next mail item
-				continue;
+				// if the service fee for this floor has not been looked up
+				mailCharge = estimateCharge(mailItem);
+				serviceFeeMap.put(mailItem.getDestFloor(), mailCharge);
+			}
+
+			if (mailCharge > ChargeCalculator.getChargeThreshold()) {
+				//add to the head
+				pool.remove(item);
+				pool.add(index,item);
+				index++;
 			}
 		}
+
+		serviceFeeMap = null;
 	}
 
 	// Estimate Charge

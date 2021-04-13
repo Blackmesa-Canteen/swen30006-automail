@@ -18,8 +18,8 @@ public class ChargeCalculator {
     private static double activityUnitPrice = 0.224;
     private static double markupPercentage = 0.059;
 
-    private static double movementActivityUnits = 0.1;
-    private static double lookupActivityUnits = 5;
+    private static double movementActivityUnits = 5;
+    private static double lookupActivityUnits = 0.1;
 
     // something may need in the future:
     private static double weightCharge;
@@ -36,8 +36,7 @@ public class ChargeCalculator {
         numLookupsForThisTime = queryResult.getNumLookups();
         queryResult = null;
 
-        // if the mail has been put back to the pool, calc accumulated movements
-        double movementTotalUnits = (movements + mailItem.getMovements()) * movementActivityUnits;
+        double movementTotalUnits = (movements) * movementActivityUnits;
 
         // user will be charged for only one look up fee per mail (see spec)
         double chargedLookUpTotalUnits = 1 * lookupActivityUnits;
@@ -49,6 +48,9 @@ public class ChargeCalculator {
         double cost = floorServiceFee + billableActivityCost;
 
         double charge = cost * (1 + markupPercentage);
+
+        // accumulate look up activities
+        mailItem.accumulateMailLookupInfo(realLookUpTotalUnitsForThisTime);
 
         // update information in the mailItem object with the latest billing data
         if(updateBillInfo) {
@@ -62,12 +64,10 @@ public class ChargeCalculator {
             mailItem.setBillableActivities(movementTotalUnits + chargedLookUpTotalUnits);
         }
 
-        mailItem.accumulateMailLookupInfo(realLookUpTotalUnitsForThisTime);
-
         // this is the estimated charge
         return charge;
     }
-
+    
     public static void setActivityUnitPrice(double activityUnitPrice) {
         ChargeCalculator.activityUnitPrice = activityUnitPrice;
     }
