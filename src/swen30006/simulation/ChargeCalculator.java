@@ -4,8 +4,8 @@ import swen30006.automail.MailItem;
 
 /**
  * @program Automail
- * @description since this calculator will be called by MailPool & Robot, so make this as a Util class and couple with
- * Simulation class
+ * @description since this calculator will be called by MailPool & Robot, so make this as a Util class and make it
+ *  as information expert of charge calculation
  * @create 2021-04-06 12:21
  */
 public class ChargeCalculator {
@@ -25,6 +25,8 @@ public class ChargeCalculator {
     private static double weightCharge;
     private static double penalty;
 
+    // calculate latest charge of a specific mailItem, requires movements that the mail needed, and
+    // whether should the calculation update bill info of the mail
     public static double CalcCharge(MailItem mailItem, int movements, boolean updateBillInfo){
         int destinationFloor = mailItem.getDestFloor();
         double floorServiceFee = -1D;
@@ -68,7 +70,7 @@ public class ChargeCalculator {
         return charge;
     }
 
-    // Estimate Charge
+    // Estimate mailItem Charge: mailRoom->destination->mailRoom
     public static double estimateCharge(MailItem mailItem, int mailroomLocation){
 
         int destinationFloor = mailItem.getDestFloor();

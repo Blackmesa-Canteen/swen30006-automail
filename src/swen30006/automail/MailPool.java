@@ -151,23 +151,6 @@ public class MailPool {
 		serviceFeeMap = null;
 	}
 
-	// Estimate Charge
-//	public double estimateCharge(MailItem mailItem){
-//
-//		int destinationFloor = mailItem.getDestFloor();
-//
-//		// Mailroom -> DestinationFloor -> Mailroom.
-//		// Cost the whole round trip as though the one item is being delivered on its own
-//		int movements = (Math.abs(destinationFloor - mailroomLocation) * 2);
-//
-//		// this is the estimated charge
-//		double estimatedCharge = ChargeCalculator.CalcCharge(mailItem, movements, false);
-//
-//		// store estimated Charge to mailItem for sorting
-//		mailItem.setEstimatedCharge(estimatedCharge);
-//		return estimatedCharge;
-//	}
-
 	/**
      * @param robot refers to a robot which has arrived back ready for more mailItems to deliver
      */	

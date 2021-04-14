@@ -183,44 +183,65 @@ public class Robot {
 
 	public void calcMailsMovements(MailItem hand, MailItem tube) {
 
-        // if the mail in the hand is the first mail needs to be delivered
         if(deliveryCounter == 0) {
             // Only one mail needs to be delivered: the mail in the hand is the first one, while nothing in the tube.
             if(tube == null) {
                 int movements = Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()) * 2;
                 hand.accumulateMailMovements(movements);
-            } else {
+            }
+            // There are two mails (in hand & in tube) need to be delivered
+            else {
+                // Explaining Vars
+                // if the mailRoom is between 2 destinations
+                boolean hand_mailRoom_tube = ((hand.getDestFloor() < mailPool.getMailroomLocation()) && (tube.getDestFloor() > mailPool.getMailroomLocation())) ;
+                boolean tube_mailRoom_hand = (hand.getDestFloor() > mailPool.getMailroomLocation() && tube.getDestFloor() < mailPool.getMailroomLocation());
+
+                // if the mailroom is under both mailitems' destinations
+                boolean mailRoom_mails = (hand.getDestFloor() >= mailPool.getMailroomLocation()) && (tube.getDestFloor() >= mailPool.getMailroomLocation());
+                // if the destination of the mail in hand is lower then mail's in tube
+                boolean mailRoom_hand_tube = (hand.getDestFloor() <= tube.getDestFloor());
+
+                // if the mail room is above both mailItem's destinations
+                // if the destination of the mail in hand is lower then mail's in tube
+                boolean hand_tube_mailRoom = (hand.getDestFloor() <= tube.getDestFloor());
+
+                // movements between destination of mail in hand & mailRoom
+                int delta_hand_mailRoom = Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation());
+
+                int delta_tube_mailRoom = Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation());
+
+                int delta_hand_tube = Math.abs(hand.getDestFloor() - tube.getDestFloor());
+
+
+
                 // if the mailroom is between 2 destinations
-                if(((hand.getDestFloor() < mailPool.getMailroomLocation()) && (tube.getDestFloor() > mailPool.getMailroomLocation())) ||
-                        (hand.getDestFloor() > mailPool.getMailroomLocation() && tube.getDestFloor() < mailPool.getMailroomLocation())) {
-                    hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()) * 2);
-                    tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()) * 2);
-                } else if ((hand.getDestFloor() >= mailPool.getMailroomLocation()) && (tube.getDestFloor() >= mailPool.getMailroomLocation())) {
-                    // if the mailroom is under both mailitems' destinations
-                    if(hand.getDestFloor() <= tube.getDestFloor()) {
+                if(hand_mailRoom_tube || tube_mailRoom_hand) {
+                    hand.accumulateMailMovements(delta_hand_mailRoom * 2);
+                    tube.accumulateMailMovements(delta_tube_mailRoom * 2);
 
-                        hand.accumulateMailMovements(hand.getDestFloor() - mailPool.getMailroomLocation());
-                        tube.accumulateMailMovements((tube.getDestFloor() - hand.getDestFloor()) * 2 +
-                                (hand.getDestFloor() - mailPool.getMailroomLocation()));
+                }
+                // if the mailroom is under both mailitems' destinations
+                else if (mailRoom_mails) {
 
+                    // if the destination of the mail in hand is lower then mail's in tube
+                    if(mailRoom_hand_tube) {
+                        hand.accumulateMailMovements(delta_hand_mailRoom);
+                        tube.accumulateMailMovements(delta_hand_tube * 2 + delta_hand_mailRoom);
                     } else {
-
-                        hand.accumulateMailMovements((hand.getDestFloor() - tube.getDestFloor()) * 2 +
-                                (tube.getDestFloor() - mailPool.getMailroomLocation()));
-                        tube.accumulateMailMovements((tube.getDestFloor() - mailPool.getMailroomLocation()));
+                        hand.accumulateMailMovements(delta_hand_tube * 2 + delta_tube_mailRoom);
+                        tube.accumulateMailMovements(delta_tube_mailRoom);
                     }
-                } else {
-                    // if the mail room is above both mailItem's destinations
-                    if(hand.getDestFloor() <= tube.getDestFloor()) {
-
-                        hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - tube.getDestFloor()) * 2 +
-                                Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()));
-                        tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - mailPool.getMailroomLocation()));
+                }
+                // if the mail room is above both mailItem's destinations
+                else {
+                    // if the destination of the mail in hand is lower then mail's in tube
+                    if(hand_tube_mailRoom) {
+                        hand.accumulateMailMovements(delta_hand_tube* 2 + delta_tube_mailRoom);
+                        tube.accumulateMailMovements(delta_tube_mailRoom);
 
                     } else {
-                        hand.accumulateMailMovements(Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()));
-                        tube.accumulateMailMovements(Math.abs(tube.getDestFloor() - hand.getDestFloor()) * 2 +
-                                Math.abs(hand.getDestFloor() - mailPool.getMailroomLocation()));
+                        hand.accumulateMailMovements(delta_hand_mailRoom);
+                        tube.accumulateMailMovements(delta_hand_tube * 2 + delta_hand_mailRoom);
 
                     }
                 }
