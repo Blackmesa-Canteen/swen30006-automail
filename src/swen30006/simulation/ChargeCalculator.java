@@ -87,26 +87,10 @@ public class ChargeCalculator {
         return estimatedCharge;
     }
 
-    
-    public static void setActivityUnitPrice(double activityUnitPrice) {
-        ChargeCalculator.activityUnitPrice = activityUnitPrice;
-    }
-
-    public static void setMarkupPercentage(double markupPercentage) {
-        ChargeCalculator.markupPercentage = markupPercentage;
-    }
-
     public static void setModemAdapter(ModemAdapter modemAdapter) {
         ChargeCalculator.modemAdapter = modemAdapter;
     }
 
-    public static void setWeightCharge(double weightCharge) {
-        ChargeCalculator.weightCharge = weightCharge;
-    }
-
-    public static void setPenalty(double penalty) {
-        ChargeCalculator.penalty = penalty;
-    }
 
     public static double getChargeThreshold() {
         return CHARGE_THRESHOLD;
@@ -116,11 +100,4 @@ public class ChargeCalculator {
         CHARGE_THRESHOLD = chargeThreshold;
     }
 
-    public static void setMovementActivityUnits(double movementActivityUnits) {
-        ChargeCalculator.movementActivityUnits = movementActivityUnits;
-    }
-
-    public static void setLookupActivityUnits(double lookupActivityUnits) {
-        ChargeCalculator.lookupActivityUnits = lookupActivityUnits;
-    }
 }
