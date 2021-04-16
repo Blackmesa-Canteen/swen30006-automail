@@ -1,6 +1,7 @@
 package swen30006.simulation;
 
 import swen30006.automail.MailItem;
+import swen30006.automail.Simulation;
 
 /**
  * @program Automail

@@ -15,8 +15,14 @@ public class ModemAdapter {
     private long totalFailedLookups = 0;
     private long totalSuccessfulLookups = 0;
 
-    public ModemAdapter(WifiModem wifiModem) {
-        this.wifiModem = wifiModem;
+    public ModemAdapter(int mailRoomLocation) {
+        try {
+            this.wifiModem = WifiModem.getInstance(mailRoomLocation);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public ModemQueryResult<Double> lookupFloorServiceFee(int destinationFloor) {
@@ -39,6 +45,14 @@ public class ModemAdapter {
         } while (floorServiceFee < 0);
 
         return new ModemQueryResult<>(lookupsForThisTime, floorServiceFee);
+    }
+
+    public void wifiTurnOn() throws Exception {
+        System.out.println(wifiModem.Turnon());
+    }
+
+    public void wifiTurnOff() {
+        System.out.println(wifiModem.Turnoff());
     }
 
     public WifiModem getWifiModem() {

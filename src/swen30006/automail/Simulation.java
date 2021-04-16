@@ -27,7 +27,6 @@ public class Simulation {
     
     private static ArrayList<MailItem> MAIL_DELIVERED;
     private static double total_delay = 0;
-    private static WifiModem wModem = null;
 
     private static ModemAdapter modemAdapter = null;
 
@@ -72,15 +71,17 @@ public class Simulation {
         // Install the modem & turn on the modem
         try {
         	System.out.println("Setting up Wifi Modem");
-        	wModem = WifiModem.getInstance(Building.MAILROOM_LOCATION);
+
+        	// New features
+			// create modemAdapter class and turn on wifi
+        	modemAdapter = new ModemAdapter(Building.MAILROOM_LOCATION);
+			modemAdapter.wifiTurnOn();
 
 			// New features
         	// create modemAdapter class and
         	// attach it to charge Calculator
-			modemAdapter = new ModemAdapter(wModem);
 			ChargeCalculator.setModemAdapter(modemAdapter);
 
-			System.out.println(wModem.Turnon());
 		} catch (Exception mException) {
 			mException.printStackTrace();
 		}
@@ -110,8 +111,10 @@ public class Simulation {
 			}
             Clock.Tick();
         }
+
         printResults();
-        System.out.println(wModem.Turnoff());
+
+        modemAdapter.wifiTurnOff();
     }
     
     static private Properties setUpProperties() throws IOException {
