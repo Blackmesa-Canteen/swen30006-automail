@@ -41,7 +41,9 @@ public class ChargeCalculator {
 
         double movementTotalUnits = (movements) * movementActivityUnits;
 
-        // user will be charged for only one look up fee per mail (see spec)
+
+        // As Automail is responsible for the infrastructure, it is only reasonable to charge the
+        // tenant one such lookup fee per mail item delivery
         double chargedLookUpTotalUnits = 1 * lookupActivityUnits;
 
         double realLookUpTotalUnitsForThisTime = numLookupsForThisTime * lookupActivityUnits;

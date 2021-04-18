@@ -1,6 +1,5 @@
 package swen30006.automail;
 
-import com.unimelb.swen30006.wifimodem.WifiModem;
 import swen30006.exceptions.ExcessiveDeliveryException;
 import swen30006.exceptions.ItemTooHeavyException;
 import swen30006.exceptions.MailAlreadyDeliveredException;
@@ -34,7 +33,7 @@ public class Simulation {
     // private static long numItemsDelivered = 0;
     private static double totalBillableActivity = 0;
     private static double totalActivityCost = 0;
-    private static double totalServiceCost = 0;
+    private static double totalServiceFee = 0;
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
@@ -73,7 +72,7 @@ public class Simulation {
         	System.out.println("Setting up Wifi Modem");
 
         	// New features
-			// create modemAdapter class and turn on wifi
+			// create modemAdapter class and turn on wifi.
         	modemAdapter = new ModemAdapter(Building.MAILROOM_LOCATION);
 			modemAdapter.wifiTurnOn();
 
@@ -174,8 +173,8 @@ public class Simulation {
     			// New feature: calculate statistic tracking data
     			totalBillableActivity += deliveryItem.getBillableActivities();
     			totalActivityCost += deliveryItem.getActivity();
-    			// not sure
-				totalServiceCost += deliveryItem.getCharge();
+    			// total service fee!
+				totalServiceFee += deliveryItem.getFee();
 
 				if(!CHARGE_DISPLAY) {
 					// original log
@@ -217,7 +216,7 @@ public class Simulation {
 			System.out.printf("The total number of items delivered: %d%n", MAIL_DELIVERED.size());
 			System.out.printf("The total billable activity: %.2f%n", totalBillableActivity);
 			System.out.printf("The total activity cost: %.2f%n", totalActivityCost);
-			System.out.printf("The total service cost: %.2f%n", totalServiceCost);
+			System.out.printf("The total service cost: %.2f%n", totalServiceFee);
 			System.out.printf("The total successful lookups: %d%n", modemAdapter.getTotalSuccessfulLookups());
 			System.out.printf("The total failed lookups: %d%n", modemAdapter.getTotalFailedLookups());
 		}
