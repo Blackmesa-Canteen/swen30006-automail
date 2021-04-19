@@ -156,7 +156,7 @@ public class Simulation {
 		CHARGE_THRESHOLD = Double.parseDouble(automailProperties.getProperty("ChargeThreshold"));
 		System.out.println("#Charge Threshold: " + CHARGE_THRESHOLD);
 		// Charge Display
-		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("CommercialDisplay"));
+		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("ChargeDisplay"));
 		System.out.println("#Charge Display: " + CHARGE_DISPLAY);
 		
 		return automailProperties;
