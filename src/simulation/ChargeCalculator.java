@@ -2,6 +2,11 @@ package simulation;
 
 import automail.MailItem;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * @program Automail
  * @description since this calculator will be called by MailPool & Robot, so make this as a Util class and make it
@@ -14,9 +19,9 @@ public class ChargeCalculator {
     private static double CHARGE_THRESHOLD;
 
     // these values are configurable according to the spec
-    // user can configure them with setters in Simulation class
-    private static double activityUnitPrice = 0.224;
-    private static double markupPercentage = 0.059;
+    // they are configured by Simulation class, who will read from properties file
+    private static double activityUnitPrice;
+    private static double markupPercentage;
 
     private static double movementActivityUnits = 5;
     private static double lookupActivityUnits = 0.1;
@@ -103,4 +108,11 @@ public class ChargeCalculator {
         CHARGE_THRESHOLD = chargeThreshold;
     }
 
+    public static void setActivityUnitPrice(double activityUnitPrice) {
+        ChargeCalculator.activityUnitPrice = activityUnitPrice;
+    }
+
+    public static void setMarkupPercentage(double markupPercentage) {
+        ChargeCalculator.markupPercentage = markupPercentage;
+    }
 }

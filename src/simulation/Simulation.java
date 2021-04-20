@@ -36,6 +36,11 @@ public class Simulation {
     private static double totalActivityCost = 0;
     private static double totalServiceFee = 0;
 
+    // configurable values
+    private static double markupPercentage;
+    private static double activityUnitPrice;
+
+
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
     	
     	/** Load properties for swen30006.simulation based on either default or a properties file.**/
@@ -67,6 +72,8 @@ public class Simulation {
 		// New features
         // configure ChargeCalculator
 		ChargeCalculator.setChargeThreshold(CHARGE_THRESHOLD);
+		ChargeCalculator.setActivityUnitPrice(activityUnitPrice);
+		ChargeCalculator.setMarkupPercentage(markupPercentage);
         
         // Install the modem & turn on the modem
         try {
@@ -124,7 +131,11 @@ public class Simulation {
     	automailProperties.setProperty("Floors", "10");
     	automailProperties.setProperty("Mail_to_Create", "80");
     	automailProperties.setProperty("ChargeThreshold", "0");
-    	automailProperties.setProperty("CommercialDisplay", "false");
+    	automailProperties.setProperty("ChargeDisplay", "false");
+
+    	// default new configurable property
+		automailProperties.setProperty("MarkupPercentage", "0.059");
+		automailProperties.setProperty("ActivityUnitPrice", "0.224");
 
     	// Read properties
 		FileReader inStream = null;
@@ -159,6 +170,10 @@ public class Simulation {
 		// Charge Display
 		CHARGE_DISPLAY = Boolean.parseBoolean(automailProperties.getProperty("ChargeDisplay"));
 		System.out.println("#Charge Display: " + CHARGE_DISPLAY);
+
+		// other two new configurable values
+		markupPercentage = Double.parseDouble(automailProperties.getProperty("MarkupPercentage"));
+		activityUnitPrice = Double.parseDouble(automailProperties.getProperty("ActivityUnitPrice"));
 		
 		return automailProperties;
     }
