@@ -31,6 +31,9 @@ public class MailItem {
     // This is billable activity cost (NO failed lookup activities included)
     protected double billableActivities;
 
+    // This is the cost of the total billable activity
+    protected double activityCost;
+
     /** Represents the destination floor to which the mail is intended to go */
     protected final int destination_floor;
     /** The mail identifier */
@@ -69,7 +72,7 @@ public class MailItem {
     public String toStringWithExtraInfo() {
         return String.format("Mail Item:: ID: %6s | Arrival: %4d | Destination: %2d | Weight: %4d | Charge: %.2f | Cost: %.2f " +
                         "| Fee: %.2f | Activity: %.2f",
-                id, arrival_time, destination_floor, weight, charge, cost, fee, activity);
+                id, arrival_time, destination_floor, weight, charge, cost, fee, billableActivities);
     }
 
     /**
@@ -191,5 +194,13 @@ public class MailItem {
 
     public void setMovements(int movements) {
         this.movements = movements;
+    }
+
+    public double getActivityCost() {
+        return activityCost;
+    }
+
+    public void setActivityCost(double activityCost) {
+        this.activityCost = activityCost;
     }
 }

@@ -67,6 +67,7 @@ public class ChargeCalculator {
             mailItem.setCost(cost);
             mailItem.setActivity(movementTotalUnits + mailItem.getRealLookupActivities());
             mailItem.setBillableActivities(movementTotalUnits + chargedLookUpTotalUnits);
+            mailItem.setActivityCost(billableActivityCost);
         }
 
         // this is the estimated charge

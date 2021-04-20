@@ -172,7 +172,7 @@ public class Simulation {
 
     			// New feature: calculate statistic tracking data
     			totalBillableActivity += deliveryItem.getBillableActivities();
-    			totalActivityCost += deliveryItem.getActivity();
+    			totalActivityCost += deliveryItem.getActivityCost();
     			// total service fee!
 				totalServiceFee += deliveryItem.getFee();
 
