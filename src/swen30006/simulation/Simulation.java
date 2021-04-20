@@ -1,5 +1,8 @@
-package swen30006.automail;
+package swen30006.simulation;
 
+import swen30006.automail.Automail;
+import swen30006.automail.MailItem;
+import swen30006.automail.MailPool;
 import swen30006.exceptions.ExcessiveDeliveryException;
 import swen30006.exceptions.ItemTooHeavyException;
 import swen30006.exceptions.MailAlreadyDeliveredException;
