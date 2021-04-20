@@ -1,4 +1,4 @@
-package swen30006.simulation;
+package simulation;
 
 public class Clock {
 	

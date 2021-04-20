@@ -1,4 +1,4 @@
-package swen30006.exceptions;
+package exceptions;
 
 /**
  * An exception thrown when a mail that is already delivered attempts to be delivered again.

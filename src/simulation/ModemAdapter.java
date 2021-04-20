@@ -1,4 +1,4 @@
-package swen30006.simulation;
+package simulation;
 
 import com.unimelb.swen30006.wifimodem.WifiModem;
 

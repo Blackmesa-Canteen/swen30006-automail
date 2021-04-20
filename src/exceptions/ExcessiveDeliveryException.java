@@ -1,4 +1,4 @@
-package swen30006.exceptions;
+package exceptions;
 
 /**
  * An exception thrown when the robot tries to deliver more items than its tube capacity without refilling.

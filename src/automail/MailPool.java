@@ -1,12 +1,12 @@
-package swen30006.automail;
+package automail;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Comparator;
 import java.util.ListIterator;
 
-import swen30006.exceptions.ItemTooHeavyException;
-import swen30006.simulation.ChargeCalculator;
+import exceptions.ItemTooHeavyException;
+import simulation.ChargeCalculator;
 
 /**
  * addToPool is called when there are mail items newly arrived at the building to add to the MailPool or

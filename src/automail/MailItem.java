@@ -1,6 +1,4 @@
-package swen30006.automail;
-
-import swen30006.simulation.ChargeCalculator;
+package automail;
 
 import java.util.Map;
 import java.util.TreeMap;
